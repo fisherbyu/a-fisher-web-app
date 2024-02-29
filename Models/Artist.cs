@@ -1,25 +1,16 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-
 namespace AFisherWebApp.Models
 {
     public class Artist
     {
-        [Key]
-        [Required]
-        public long ArtistId { get; set; }
-        [Required]
+        public int Id { get; set; }
+        public int Tier { get; set; }
+        public int Rank { get; set; }
         public string Name { get; set; }
-        [Required]
-        public string PhotoURL { get; set; }
-        [Required]
-        public string AppleURI { get; set; }
-        [Required]
-        public string SpotifyURI { get; set; }
-
-        // Navigation + Foreign Key
-        public long DescriptionID { get; set; }
-        public Description Description { get; set; }
+        public List<Content> Contents { get; set; }
+        public List<Tag> Tags { get; set; }
+        public Link Links { get; set; }
+        public Image Image { get; set; }
     }
 }
 
