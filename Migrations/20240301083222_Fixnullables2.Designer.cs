@@ -3,6 +3,7 @@ using System;
 using AFisherWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFisherWebApp.Migrations
 {
     [DbContext(typeof(FisherAndrewDBContext))]
-    partial class FisherAndrewDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240301083222_Fixnullables2")]
+    partial class Fixnullables2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -30,6 +33,9 @@ namespace AFisherWebApp.Migrations
                     b.Property<int>("Rank")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Tier")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Albums");
@@ -45,7 +51,7 @@ namespace AFisherWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Rank")
+                    b.Property<int>("Rank")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Tier")
@@ -156,7 +162,6 @@ namespace AFisherWebApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("ArtistId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")

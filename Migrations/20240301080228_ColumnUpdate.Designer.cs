@@ -3,6 +3,7 @@ using System;
 using AFisherWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFisherWebApp.Migrations
 {
     [DbContext(typeof(FisherAndrewDBContext))]
-    partial class FisherAndrewDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240301080228_ColumnUpdate")]
+    partial class ColumnUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -30,6 +33,9 @@ namespace AFisherWebApp.Migrations
                     b.Property<int>("Rank")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Tier")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Albums");
@@ -45,7 +51,7 @@ namespace AFisherWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Rank")
+                    b.Property<int>("Rank")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Tier")
@@ -75,6 +81,10 @@ namespace AFisherWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
@@ -91,6 +101,7 @@ namespace AFisherWebApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("AlbumId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Alt")
@@ -98,6 +109,7 @@ namespace AFisherWebApp.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ArtistId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Src")
@@ -137,11 +149,9 @@ namespace AFisherWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlbumId")
-                        .IsUnique();
+                    b.HasIndex("AlbumId");
 
-                    b.HasIndex("ArtistId")
-                        .IsUnique();
+                    b.HasIndex("ArtistId");
 
                     b.ToTable("Links");
                 });
@@ -156,7 +166,6 @@ namespace AFisherWebApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("ArtistId")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
@@ -195,11 +204,15 @@ namespace AFisherWebApp.Migrations
                 {
                     b.HasOne("AFisherWebApp.Models.Album", "Album")
                         .WithOne("Image")
-                        .HasForeignKey("AFisherWebApp.Models.Image", "AlbumId");
+                        .HasForeignKey("AFisherWebApp.Models.Image", "AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AFisherWebApp.Models.Artist", "Artist")
                         .WithOne("Image")
-                        .HasForeignKey("AFisherWebApp.Models.Image", "ArtistId");
+                        .HasForeignKey("AFisherWebApp.Models.Image", "ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Album");
 
@@ -209,12 +222,12 @@ namespace AFisherWebApp.Migrations
             modelBuilder.Entity("AFisherWebApp.Models.Link", b =>
                 {
                     b.HasOne("AFisherWebApp.Models.Album", "Album")
-                        .WithOne("Link")
-                        .HasForeignKey("AFisherWebApp.Models.Link", "AlbumId");
+                        .WithMany("Links")
+                        .HasForeignKey("AlbumId");
 
                     b.HasOne("AFisherWebApp.Models.Artist", "Artist")
-                        .WithOne("Link")
-                        .HasForeignKey("AFisherWebApp.Models.Link", "ArtistId");
+                        .WithMany("Links")
+                        .HasForeignKey("ArtistId");
 
                     b.Navigation("Album");
 
@@ -243,8 +256,7 @@ namespace AFisherWebApp.Migrations
                     b.Navigation("Image")
                         .IsRequired();
 
-                    b.Navigation("Link")
-                        .IsRequired();
+                    b.Navigation("Links");
 
                     b.Navigation("Tags");
                 });
@@ -256,8 +268,7 @@ namespace AFisherWebApp.Migrations
                     b.Navigation("Image")
                         .IsRequired();
 
-                    b.Navigation("Link")
-                        .IsRequired();
+                    b.Navigation("Links");
 
                     b.Navigation("Tags");
                 });
