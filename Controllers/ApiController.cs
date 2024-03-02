@@ -47,6 +47,17 @@ namespace Learn_API.Controllers
         [HttpGet("artist")]
         public IActionResult GetArtists()
         {
+            //List<Artist> artists = DbContext.Artists
+            //    .Include(a => a.Image)
+            //    .Include(a => a.Content)
+            //    .Include(a => a.Tags)
+            //    .Include(a => a.Link)
+            //    .ToList();
+
+            //List<ArtistExportDto> exportArtists = artists
+            //    .Select(a => new ArtistExportDto(a))
+            //    .ToList();
+
             var artists = DbContext.Artists
                 .Include(a => a.Image)
                 .Include(a => a.Content)
@@ -74,27 +85,23 @@ namespace Learn_API.Controllers
         [HttpGet("artist/{id}")]
         public IActionResult GetArtist(int id)
         {
-            var artist = DbContext.Artists
-                    .Include(a => a.Image)
-                    .Include(a => a.Content)
-                    .Include(a => a.Tags)
-                    .Include(a => a.Link)
-                    .Where(a => a.Id == id)
-                    .Select(a => new
-                    {
-                        a.Id,
-                        a.Tier,
-                        a.Rank,
-                        a.Name,
-                        a.Content,
-                        Type = "Artist",
-                        a.Tags,
-                        a.Link,
-                        a.Image
-                    })
-                    .FirstOrDefault();
+            Artist artist = DbContext.Artists
+            .Include(a => a.Image)
+            .Include(a => a.Content)
+            .Include(a => a.Tags)
+            .Include(a => a.Link)
+            .FirstOrDefault(a => a.Id == id);
 
-            return Json(artist, jsonSettings);
+            if (artist == null)
+            {
+                return NotFound();
+            }
+
+            var exportArtist = new ArtistExportDto(artist);
+
+            return Json(exportArtist, jsonSettings);
+
+
         }
 
         // GET: api/album
@@ -153,45 +160,78 @@ namespace Learn_API.Controllers
         [HttpPost("artist")]
         public IActionResult CreateArtist([FromBody] ArtistDto dto)
         {
-            // Map the ArtistDto to an Artist entity
-            Artist artist = new Artist
+            // Validate Input
+            if (!ModelState.IsValid)
             {
-                Tier = dto.Tier,
-                Rank = dto.Rank,
-                Name = dto.Name,
-                Content = new List<Content>(),
-                Tags = new List<Tag>(),
-                Link = new Link
+                return BadRequest(ModelState);
+            }
+
+            // Add Data to the Database
+            try
+            {
+                // Map the ArtistDto to an Artist entity
+                Artist artist = new Artist
                 {
-                    AppleURI = dto.Link.AppleURI,
-                    SpotifyURI = dto.Link.SpotifyURI
+                    Tier = dto.Tier,
+                    Rank = dto.Rank,
+                    Name = dto.Name,
+                    Content = new List<Content>(),
+                    Tags = new List<Tag>(),
+                    Link = new Link
+                    {
+                        AppleURI = dto.Link.AppleURI,
+                        SpotifyURI = dto.Link.SpotifyURI
+                    }
+                };
+
+                // Add the artist and related entities to the context
+                DbContext.Artists.Add(artist);
+
+                // Save changes to the database
+                DbContext.SaveChanges();
+
+                // Extract Content
+                for (int i = 0; i < dto.Content.Count; i++)
+                {
+                    artist.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], ArtistId = artist.Id });
                 }
-            };
 
-            // Add the artist and related entities to the context
-            DbContext.Artists.Add(artist);
+                //Extract Tags
+                foreach (TagDto tagDto in dto.Tags)
+                {
+                    artist.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, ArtistId = artist.Id });
+                }
 
-            // Save changes to the database
-            DbContext.SaveChanges();
+                // Save changes again to update Content and Tags with the correct ArtistId
+                DbContext.SaveChanges();
 
-            // Extract Content
-            for (int i = 0; i < dto.Content.Count; i++)
+                //var data = new
+                //{
+                //    id = artist.Id,
+
+                //}
+                return Ok();
+            }
+            catch (Exception ex)
             {
-                artist.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], ArtistId = artist.Id });
+                // Log Error
+                Console.Error.WriteLine($"Error creating artist: {ex.Message}");
+                // Return a 500 Internal Server Error response
+                return StatusCode(500, "An error occurred while creating the artist.");
             }
 
-            //Extract Tags
-            foreach (TagDto tagDto in dto.Tags)
-            {
-                artist.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, ArtistId = artist.Id });
-            }
 
-            // Save changes again to update Content and Tags with the correct ArtistId
-            DbContext.SaveChanges();
 
-            // Optionally, return CreatedAtRoute
-            return Ok();
+            
         }
 
     }
 }
+
+
+
+
+
+
+
+
