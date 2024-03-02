@@ -59,7 +59,6 @@ namespace AFisherWebApp.Models
         public string Title { get; set; }
         [Required]
         public string Content { get; set; }
-        [Required]
         public int? ArtistId { get; set; }
         public Artist Artist { get; set; }
         public int? AlbumId { get; set; }
@@ -102,6 +101,16 @@ namespace AFisherWebApp.Models
     public class ArtistDto
     {
         public int Tier { get; set; }
+        public int Rank { get; set; }
+        public string Name { get; set; }
+        public List<string> Content { get; set; }
+        public List<TagDto> Tags { get; set; }
+        public LinkDto Link { get; set; }
+        public ImageDto Image { get; set; }
+    }
+
+    public class AlbumDto
+    {
         public int Rank { get; set; }
         public string Name { get; set; }
         public List<string> Content { get; set; }

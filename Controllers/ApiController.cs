@@ -100,8 +100,6 @@ namespace Learn_API.Controllers
             var exportArtist = new ArtistExportDto(artist);
 
             return Json(exportArtist, jsonSettings);
-
-
         }
 
         // GET: api/album
@@ -125,7 +123,6 @@ namespace Learn_API.Controllers
                         a.Image
                     })
                     .ToList();
-
 
             return Json(albums, jsonSettings);
         }
@@ -176,41 +173,44 @@ namespace Learn_API.Controllers
                     Rank = dto.Rank,
                     Name = dto.Name,
                     Content = new List<Content>(),
-                    Tags = new List<Tag>(),
-                    Link = new Link
-                    {
-                        AppleURI = dto.Link.AppleURI,
-                        SpotifyURI = dto.Link.SpotifyURI
-                    }
+                    Tags = new List<Tag>()
                 };
 
-                // Add the artist and related entities to the context
+                // Save the Artist
                 DbContext.Artists.Add(artist);
 
                 // Save changes to the database
                 DbContext.SaveChanges();
 
-                // Extract Content
+                // Map Content to Created Artist Entity
                 for (int i = 0; i < dto.Content.Count; i++)
                 {
                     artist.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], ArtistId = artist.Id });
                 }
 
-                //Extract Tags
+                // Map Tags to Artist Entity
                 foreach (TagDto tagDto in dto.Tags)
                 {
                     artist.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, ArtistId = artist.Id });
                 }
 
-                // Save changes again to update Content and Tags with the correct ArtistId
+                // Add Final Linked Tables to Created Artist Entity
+                artist.Link = new Link
+                {
+                    AppleURI = dto.Link.AppleURI,
+                    SpotifyURI = dto.Link.SpotifyURI
+                };
+                artist.Image = new Image
+                {
+                    Src = dto.Image.Src,
+                    Alt = dto.Image.Alt,
+                    ArtistId = artist.Id
+                };
+
+                // Save changes again to update Linked Tables with correct ArtistId
                 DbContext.SaveChanges();
 
-                //var data = new
-                //{
-                //    id = artist.Id,
-
-                //}
-                return Ok();
+                return Ok("Success!");
             }
             catch (Exception ex)
             {
@@ -219,12 +219,133 @@ namespace Learn_API.Controllers
                 // Return a 500 Internal Server Error response
                 return StatusCode(500, "An error occurred while creating the artist.");
             }
-
-
-
-            
         }
 
+        // POST: api/album
+        [HttpPost("album")]
+        public IActionResult CreateAlbum([FromBody] AlbumDto dto)
+        {
+            // Validate Input
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Add Data to the Database
+            try
+            {
+                // Map the AlbumDto to an Album entity
+                Album album = new Album
+                {
+                    Rank = dto.Rank,
+                    Name = dto.Name,
+                    Content = new List<Content>(),
+                    Tags = new List<Tag>()
+                };
+
+                // Save the Album
+                DbContext.Albums.Add(album);
+
+                // Save changes to the database
+                DbContext.SaveChanges();
+
+                // Map Content to Created Album Entity
+                for (int i = 0; i < dto.Content.Count; i++)
+                {
+                    album.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], AlbumId = album.Id });
+                }
+
+                // Map Tags to Album Entity
+                foreach (TagDto tagDto in dto.Tags)
+                {
+                    album.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, AlbumId = album.Id });
+                }
+
+                // Add Final Linked Tables to Created Album Entity
+                album.Link = new Link
+                {
+                    AppleURI = dto.Link.AppleURI,
+                    SpotifyURI = dto.Link.SpotifyURI
+                };
+                album.Image = new Image
+                {
+                    Src = dto.Image.Src,
+                    Alt = dto.Image.Alt,
+                    AlbumId = album.Id
+                };
+
+                // Save changes again to update Linked Tables with correct AlbumId
+                DbContext.SaveChanges();
+
+                return Ok("Success!");
+            }
+            catch (Exception ex)
+            {
+                // Log Error
+                Console.Error.WriteLine($"Error creating album: {ex.Message}");
+                // Return a 500 Internal Server Error response
+                return StatusCode(500, "An error occurred while creating the album.");
+            }
+        }
+
+        //// POST: api/album
+        //[HttpPost("album")]
+        //public IActionResult CreateAlbum([FromBody] AlbumDto dto)
+        //{
+        //    // Validate Input
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    // Add Data to the Database
+        //    try
+        //    {
+        //        // Map the ArtistDto to an Artist entity
+        //        Album album = new Album
+        //        {
+        //            Rank = dto.Rank,
+        //            Name = dto.Name,
+        //            Content = new List<Content>(),
+        //            Tags = new List<Tag>(),
+        //            Link = new Link
+        //            {
+        //                AppleURI = dto.Link.AppleURI,
+        //                SpotifyURI = dto.Link.SpotifyURI
+        //            }
+        //        };
+
+        //        // Add the artist and related entities to the context
+        //        DbContext.Albums.Add(album);
+
+        //        // Save changes to the database
+        //        DbContext.SaveChanges();
+
+        //        // Extract Content
+        //        for (int i = 0; i < dto.Content.Count; i++)
+        //        {
+        //            album.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], AlbumId = album.Id });
+        //        }
+
+        //        //Extract Tags
+        //        foreach(TagDto tagDto in dto.Tags)
+        //        {
+        //            album.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, AlbumId = album.Id });
+        //        }
+
+        //        // Save changes again to update Content and Tags with the correct ArtistId
+        //        DbContext.SaveChanges();
+
+        //        return Ok("Success!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log Error
+        //        Console.Error.WriteLine($"Error creating artist: {ex.InnerException}");
+        //        // Return a 500 Internal Server Error response
+        //        return StatusCode(500, $"An error occurred while creating the Album.{ex.InnerException}");
+        //    }
+        //}
     }
 }
 
