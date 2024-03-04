@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Learn_API.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("/")]
     public class APIController : Controller
     {
         // Attributes
