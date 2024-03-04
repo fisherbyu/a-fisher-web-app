@@ -15,8 +15,11 @@ namespace Learn_API.Controllers
     [ApiController]
     public class APIController : Controller
     {
+        // Attributes
         public FisherAndrewDBContext DbContext { get; set; }
         public JsonSerializerOptions jsonSettings { get; set; }
+
+        // Constructor
         public APIController(FisherAndrewDBContext context)
         {
             //Link DB
@@ -29,6 +32,8 @@ namespace Learn_API.Controllers
                 IgnoreNullValues = true
             };
         }
+
+        // Endpoints: --------------------------------------------------------------------------------------------------------------------
 
         // GET: api/
         [HttpGet]
@@ -47,36 +52,15 @@ namespace Learn_API.Controllers
         [HttpGet("artist")]
         public IActionResult GetArtists()
         {
-            //List<Artist> artists = DbContext.Artists
-            //    .Include(a => a.Image)
-            //    .Include(a => a.Content)
-            //    .Include(a => a.Tags)
-            //    .Include(a => a.Link)
-            //    .ToList();
-
-            //List<ArtistExportDto> exportArtists = artists
-            //    .Select(a => new ArtistExportDto(a))
-            //    .ToList();
-
-            var artists = DbContext.Artists
+            // Get all Artists from Db, Format as Dto for Export
+            List<ArtistDto> artists = DbContext.Artists
                 .Include(a => a.Image)
                 .Include(a => a.Content)
                 .Include(a => a.Tags)
                 .Include(a => a.Link)
-                .Select(a => new
-                {
-                    a.Id,
-                    a.Tier,
-                    a.Rank,
-                    a.Name,
-                    a.Content,
-                    Type = "Artist",
-                    a.Tags,
-                    a.Link,
-                    a.Image
-                })
+                .Select(a => new ArtistDto(a))
                 .ToList();
-                
+
 
             return Json(artists, jsonSettings);
         }
@@ -97,7 +81,7 @@ namespace Learn_API.Controllers
                 return NotFound();
             }
 
-            var exportArtist = new ArtistExportDto(artist);
+            var exportArtist = new ArtistDto(artist);
 
             return Json(exportArtist, jsonSettings);
         }
@@ -106,23 +90,14 @@ namespace Learn_API.Controllers
         [HttpGet("album")]
         public IActionResult GetAlbums()
         {
-            var albums = DbContext.Albums
-                    .Include(a => a.Image)
-                    .Include(a => a.Content)
-                    .Include(a => a.Tags)
-                    .Include(a => a.Link)
-                    .Select(a => new
-                    {
-                        a.Id,
-                        a.Rank,
-                        a.Name,
-                        a.Content,
-                        Type = "Album",
-                        a.Tags,
-                        a.Link,
-                        a.Image
-                    })
-                    .ToList();
+            List<AlbumDto> albums = DbContext.Albums
+                .Include(a => a.Image)
+                .Include(a => a.Content)
+                .Include(a => a.Tags)
+                .Include(a => a.Link)
+                .Select(a => new AlbumDto(a))
+                .ToList();
+
 
             return Json(albums, jsonSettings);
         }
@@ -131,6 +106,7 @@ namespace Learn_API.Controllers
         [HttpGet("album/{id}")]
         public IActionResult GetAlbum(int id)
         {
+            // Get all Albums from Db, Format as Dto for Export
             var album = DbContext.Albums
                     .Include(a => a.Image)
                     .Include(a => a.Content)
