@@ -169,9 +169,9 @@ namespace Learn_API.Controllers
                 // Map the ArtistDto to an Artist entity
                 Artist artist = new Artist
                 {
-                    Tier = dto.Tier,
-                    Rank = dto.Rank,
-                    Name = dto.Name,
+                    Tier = dto.tier,
+                    Rank = dto.rank,
+                    Name = dto.name,
                     Content = new List<Content>(),
                     Tags = new List<Tag>()
                 };
@@ -183,27 +183,27 @@ namespace Learn_API.Controllers
                 DbContext.SaveChanges();
 
                 // Map Content to Created Artist Entity
-                for (int i = 0; i < dto.Content.Count; i++)
+                for (int i = 0; i < dto.content.Count; i++)
                 {
-                    artist.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], ArtistId = artist.Id });
+                    artist.Content.Add(new Content { Order = (i + 1), Text = dto.content[i], ArtistId = artist.Id });
                 }
 
                 // Map Tags to Artist Entity
-                foreach (TagDto tagDto in dto.Tags)
+                foreach (TagDto tagDto in dto.tags)
                 {
-                    artist.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, ArtistId = artist.Id });
+                    artist.Tags.Add(new Tag { Title = tagDto.title, Content = tagDto.content, ArtistId = artist.Id });
                 }
 
                 // Add Final Linked Tables to Created Artist Entity
                 artist.Link = new Link
                 {
-                    AppleURI = dto.Link.AppleURI,
-                    SpotifyURI = dto.Link.SpotifyURI
+                    AppleURI = dto.link.AppleURI,
+                    SpotifyURI = dto.link.SpotifyURI
                 };
                 artist.Image = new Image
                 {
-                    Src = dto.Image.Src,
-                    Alt = dto.Image.Alt,
+                    Src = dto.image.Src,
+                    Alt = dto.image.Alt,
                     ArtistId = artist.Id
                 };
 
@@ -237,8 +237,8 @@ namespace Learn_API.Controllers
                 // Map the AlbumDto to an Album entity
                 Album album = new Album
                 {
-                    Rank = dto.Rank,
-                    Name = dto.Name,
+                    Rank = dto.rank,
+                    Name = dto.name,
                     Content = new List<Content>(),
                     Tags = new List<Tag>()
                 };
@@ -250,27 +250,27 @@ namespace Learn_API.Controllers
                 DbContext.SaveChanges();
 
                 // Map Content to Created Album Entity
-                for (int i = 0; i < dto.Content.Count; i++)
+                for (int i = 0; i < dto.content.Count; i++)
                 {
-                    album.Content.Add(new Content { Order = (i + 1), Text = dto.Content[i], AlbumId = album.Id });
+                    album.Content.Add(new Content { Order = (i + 1), Text = dto.content[i], AlbumId = album.Id });
                 }
 
                 // Map Tags to Album Entity
-                foreach (TagDto tagDto in dto.Tags)
+                foreach (TagDto tagDto in dto.tags)
                 {
-                    album.Tags.Add(new Tag { Title = tagDto.Title, Content = tagDto.Content, AlbumId = album.Id });
+                    album.Tags.Add(new Tag { Title = tagDto.title, Content = tagDto.content, AlbumId = album.Id });
                 }
 
                 // Add Final Linked Tables to Created Album Entity
                 album.Link = new Link
                 {
-                    AppleURI = dto.Link.AppleURI,
-                    SpotifyURI = dto.Link.SpotifyURI
+                    AppleURI = dto.link.AppleURI,
+                    SpotifyURI = dto.link.SpotifyURI
                 };
                 album.Image = new Image
                 {
-                    Src = dto.Image.Src,
-                    Alt = dto.Image.Alt,
+                    Src = dto.image.Src,
+                    Alt = dto.image.Alt,
                     AlbumId = album.Id
                 };
 
