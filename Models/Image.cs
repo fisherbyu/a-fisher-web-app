@@ -20,8 +20,8 @@ namespace AFisherWebApp.Models
 
     public class ImageDto
     {
-        public string Src { get; set; }
-        public string Alt { get; set; }
+        public string src { get; set; }
+        public string alt { get; set; }
     }
 }
 

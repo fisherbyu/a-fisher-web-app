@@ -197,13 +197,13 @@ namespace Learn_API.Controllers
                 // Add Final Linked Tables to Created Artist Entity
                 artist.Link = new Link
                 {
-                    AppleURI = dto.link.AppleURI,
-                    SpotifyURI = dto.link.SpotifyURI
+                    AppleURI = dto.link.appleURI,
+                    SpotifyURI = dto.link.spotifyURI
                 };
                 artist.Image = new Image
                 {
-                    Src = dto.image.Src,
-                    Alt = dto.image.Alt,
+                    Src = dto.image.src,
+                    Alt = dto.image.alt,
                     ArtistId = artist.Id
                 };
 
@@ -264,13 +264,13 @@ namespace Learn_API.Controllers
                 // Add Final Linked Tables to Created Album Entity
                 album.Link = new Link
                 {
-                    AppleURI = dto.link.AppleURI,
-                    SpotifyURI = dto.link.SpotifyURI
+                    AppleURI = dto.link.appleURI,
+                    SpotifyURI = dto.link.spotifyURI
                 };
                 album.Image = new Image
                 {
-                    Src = dto.image.Src,
-                    Alt = dto.image.Alt,
+                    Src = dto.image.src,
+                    Alt = dto.image.alt,
                     AlbumId = album.Id
                 };
 

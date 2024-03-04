@@ -20,8 +20,8 @@ namespace AFisherWebApp.Models
 
     public class LinkDto
     {
-        public string AppleURI { get; set; }
-        public string SpotifyURI { get; set; }
+        public string appleURI { get; set; }
+        public string spotifyURI { get; set; }
     }
 }
 
