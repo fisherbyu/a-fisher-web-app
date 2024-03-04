@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace AFisherWebApp.Models
 {
@@ -18,6 +20,9 @@ namespace AFisherWebApp.Models
         public List<Tag> Tags { get; set; }
         public Link Link { get; set; }
         public Image Image { get; set; }
+
+        
+
     }
 
     public class Album
@@ -34,6 +39,18 @@ namespace AFisherWebApp.Models
         public Link Link { get; set; }
         public Image Image { get; set; }
     }
+
+
+    // Output Data
+    public class DataResult
+    {
+        public int id { get; set; }
+        public int rank { get; set; }
+        public string name { get; set; }
+        public List<string> content { get; set; }
+        public string type { get; set; }
+
+}
 
     public class Content
     {
