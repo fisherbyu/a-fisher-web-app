@@ -23,6 +23,7 @@ namespace AFisherWebApp.Models
     {
         public int rank { get; set; }
         public string name { get; set; }
+        public string type { get; set; }
         public List<string> content { get; set; }
         public List<TagDto> tags { get; set; }
         public LinkDto link { get; set; }
@@ -33,6 +34,7 @@ namespace AFisherWebApp.Models
         {
             rank = album.Rank;
             name = album.Name;
+            type = "Album";
             content = new List<string>();
             tags = new List<TagDto>();
             link = new LinkDto { appleURI = album.Link.AppleURI, spotifyURI = album.Link.SpotifyURI };
