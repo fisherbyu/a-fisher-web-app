@@ -3,76 +3,73 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AFisherWebApp.Models
 {
-	public class AFisherDBContext: DbContext
-	{
+    public class AFisherDBContext : DbContext
+    {
+        // Configure Constructor
+        public AFisherDBContext(DbContextOptions<AFisherDBContext> options)
+            : base(options)
+        { }
+
         // Define Tables
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Album> Albums { get; set; }
-        public DbSet<Content> Contents { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Content> Contents { get; set; }
         public DbSet<Link> Links { get; set; }
         public DbSet<Image> Images { get; set; }
-
-        // Constructor
-        public AFisherDBContext(DbContextOptions<AFisherDBContext> options) : base(options)
-        {
-        }
-
-        // Define Table Relationships
+        
+        // Define Entiy Relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Link Artist Entity to its attributes
-
-            // Define one to many: Artist 0..1 -------- 1..* Content
-            // Artist has many Content
+            // Configure Artist Relationships
+            // Artist 0..1 ---- 1..* Content
             modelBuilder.Entity<Artist>()
-                .HasMany(a => a.Content)            // Artist has many Content
-                .WithOne(c => c.Artist)             // Content Has one Artist
-                .HasForeignKey(c => c.ArtistId);    // Content connects on ArtistId
+                .HasMany(a => a.Content)
+                .WithOne(c => c.Artist)
+                .HasForeignKey(c => c.ArtistId);
 
-            // Content has one Artist
-            modelBuilder.Entity<Content>()
-                .HasOne(c => c.Artist)              // Content has one Artist
-                .WithMany(a => a.Content)           // Artist has many Content
-                .HasForeignKey(c => c.ArtistId)     // Content connects on ArtistId
-                .IsRequired(false);                 // Content doesn't always link to Artist
-
-            // Define one to many: Artist 0..1 -------- 1..* Tag
-            // Artist has many Tag
+            // Artist 0..1 ---- 1..* Tag
             modelBuilder.Entity<Artist>()
-                .HasMany(a => a.Tags)               // Artist has many Tag
-                .WithOne(t => t.Artist)             // Tag Has one Artist
-                .HasForeignKey(t => t.ArtistId);    // Tag connects on ArtistId
+                .HasMany(a => a.Tags)
+                .WithOne(t => t.Artist)
+                .HasForeignKey(t => t.ArtistId);
 
-            // Tag has one Artist
-            modelBuilder.Entity<Tag>()
-                .HasOne(t => t.Artist)              // Tag has one Artist
-                .WithMany(a => a.Tags)              // Artist has many Tag
-                .HasForeignKey(t => t.ArtistId)     // Tag connects on ArtistId
-                .IsRequired(false);                 // Tag doesn't always link to Artist
-
-            // Define one to one: Artist 0..1 -------- 1..1 Link
-            // Artist has one Link
+            // Artist 0..1 ---- 1..1 Link
             modelBuilder.Entity<Artist>()
-                .HasOne(a => a.Link)                    // Artist has one Tag
-                .WithOne(l => l.Artist)                 // Tag has one Artist
-                .HasForeignKey<Link>(l => l.ArtistId);  // Link connects
+                .HasOne(a => a.Link)
+                .WithOne(l => l.Artist)
+                .HasForeignKey<Link>(l => l.ArtistId);
 
+            // Artist 0..1 ---- 1..1 Image
+            modelBuilder.Entity<Artist>()
+                .HasOne(a => a.Image)
+                .WithOne(i => i.Artist)
+                .HasForeignKey<Image>(i => i.ArtistId);
 
+            // Configure Album Relationships
+            // Album 0..1 ---- 1..* Content
+            modelBuilder.Entity<Album>()
+                .HasMany(a => a.Content)
+                .WithOne(c => c.Album)
+                .HasForeignKey(c => c.AlbumId);
 
+            // Album 0..1 ---- 1..* Tag
+            modelBuilder.Entity<Album>()
+                .HasMany(a => a.Tags)
+                .WithOne(t => t.Album)
+                .HasForeignKey(t => t.AlbumId);
 
+            // Album 0..1 ---- 1..1 Link
+            modelBuilder.Entity<Album>()
+                .HasOne(a => a.Link)
+                .WithOne(l => l.Album)
+                .HasForeignKey<Link>(l => l.AlbumId);
 
-                    //.HasMany(a => a.Tags)
-                    //.WithOne(t => t.Artist)
-                    //.HasForeignKey(t => t.ArtistId);
-
-                // Content has one Artist
-                modelBuilder.Entity<Tag>()
-                    .HasOne(t => t.Artist)
-                    .WithMany(a => a.Tags)
-                    .HasForeignKey(t => t.ArtistId)
-                    .IsRequired(false);
-
+            // Artist 0..1 ---- 1..1 Image
+            modelBuilder.Entity<Album>()
+                .HasOne(a => a.Image)
+                .WithOne(i => i.Album)
+                .HasForeignKey<Image>(i => i.AlbumId);
         }
     }
 }
