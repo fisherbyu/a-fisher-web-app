@@ -69,7 +69,7 @@ namespace AFisherWebApp.Models
                 Tier = this.Tier,
                 Rank = this.Rank,
                 Name = this.Name,
-                Content = this.Content.Select(text => new Content { Text = text }).ToList(),
+                Content = this.Content.Select((text, index) => new Content { Text = text, Order = index }).ToList(),
                 Tags = this.Tags.Select(tagDto => new Tag { Title = tagDto.Title, Content = tagDto.Content }).ToList(),
                 Link = new Link { AppleURI = this.Link.AppleURI, SpotifyURI = this.Link.SpotifyURI },
                 Image = new Image { Src = this.Image.Src, Alt = this.Image.Alt }
