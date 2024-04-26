@@ -32,7 +32,7 @@ namespace AFisherWebApp.Models
         // For Creating a Dto from Json Inputs (Default)
         public ArtistDto()
         {
-
+            Type = "Album";
         }
 
         // For Creating a Dto from an Artist
