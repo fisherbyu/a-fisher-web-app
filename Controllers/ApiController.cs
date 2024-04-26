@@ -65,6 +65,21 @@ namespace AFisherWebApp.Controllers
 
         // GET: api/artist/{id}
 
+        // GET: api/album
+        [HttpGet("album")]
+        public IActionResult GetAlbums()
+        {
+            List<AlbumDto> albums = DbContext.Albums
+                .Include(a => a.Image)
+                .Include(a => a.Content)
+                .Include(a => a.Tags)
+                .Include(a => a.Link)
+                .Select(a => new AlbumDto(a))
+                .ToList();
+
+            return Json(albums);
+        }
+
         // POST: api/artist
         [HttpPost("artist")]
         public IActionResult CreateArtist([FromBody] ArtistDto dto)
