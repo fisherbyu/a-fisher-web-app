@@ -69,7 +69,7 @@ namespace AFisherWebApp.Controllers
         [HttpGet("artist/{id}")]
         public IActionResult GetArtist(int id)
         {
-            // Select Artist with Id
+            // Select Artist with matching Id
             Artist artist = DbContext.Artists
                 .Include(a => a.Image)
                 .Include(a => a.Content)
@@ -100,6 +100,25 @@ namespace AFisherWebApp.Controllers
 
             // Return to User
             return Json(albums);
+        }
+
+        // GET: api/album/{id}
+        [HttpGet("album/{id}")]
+        public IActionResult GetAlbum(int id)
+        {
+            // Select Artist with matching Id
+            Album album = DbContext.Albums
+                .Include(a => a.Image)
+                .Include(a => a.Content)
+                .Include(a => a.Tags)
+                .Include(a => a.Link)
+                .FirstOrDefault(a => a.Id == id);
+
+            // Translate to Dto
+            AlbumDto exportAlbum = new AlbumDto(album);
+
+            // Return to User
+            return Json(exportAlbum, jsonSettings);
         }
 
         // POST: api/artist
