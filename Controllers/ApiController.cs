@@ -97,10 +97,10 @@ namespace AFisherWebApp.Controllers
             catch (Exception ex)
             {
                 // Log Error
-                Console.Error.WriteLine($"Error creating artist: {ex.Message}");
+                Console.Error.WriteLine($"Error creating artist: {ex.InnerException}");
 
                 // Return a 500 Internal Server Error response
-                return StatusCode(500, "An error occurred while creating the artist.");
+                return StatusCode(500, $"An error occurred while creating the artist. {ex.InnerException}");
             }
         }
     }

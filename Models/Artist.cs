@@ -28,30 +28,21 @@ namespace AFisherWebApp.Models
     public class ArtistDto
     {
         // Constructors
-        // For Creating a Dto from Inputs (JSON)
-        [JsonConstructor]
-        public ArtistDto(int? id, int tier, int? rank, string name, string type, List<string> content, List<TagDto> tags, LinkDto link, ImageDto image)
+        // For Creating a Dto from Json Inputs (Default)
+        public ArtistDto()
         {
-            Id = id;
-            Tier = tier;
-            Rank = rank;
-            Name = name;
-            Type = type;
-            Content = content;
-            Tags = tags;
-            Link = link;
-            Image = image;
+
         }
 
-        // For Creating a Dto from and Artist
+        // For Creating a Dto from an Artist
         public ArtistDto(Artist artist)
         {
             Id = artist.Id;
             Tier = artist.Tier;
             Rank = artist.Rank;
             Name = artist.Name;
-            Type = "Artist"; // Assuming this is a default value for all artists
-            Content = artist.Content.Select(c => c.Text).ToList(); // Assuming Content has a Name property
+            Type = "Artist";
+            Content = artist.Content.Select(c => c.Text).ToList();
             Tags = artist.Tags.Select(tag => new TagDto { Title = tag.Title, Content = tag.Content }).ToList();
             Link = new LinkDto { AppleURI = artist.Link.AppleURI, SpotifyURI = artist.Link.SpotifyURI };
             Image = new ImageDto { Src = artist.Image.Src, Alt = artist.Image.Alt };
