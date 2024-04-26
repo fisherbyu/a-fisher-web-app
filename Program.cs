@@ -13,8 +13,10 @@ builder.Services.AddSwaggerGen();
 
 // Database Connection:
 builder.Services.AddDbContext<AFisherDBContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
-
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
