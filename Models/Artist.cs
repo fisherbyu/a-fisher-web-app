@@ -28,6 +28,7 @@ namespace AFisherWebApp.Models
     public class ArtistDto
     {
         // Constructors
+
         // For Creating a Dto from Json Inputs (Default)
         public ArtistDto()
         {
