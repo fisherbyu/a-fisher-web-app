@@ -52,6 +52,7 @@ namespace AFisherWebApp.Controllers
         [HttpGet("artist")]
         public IActionResult GetArtists()
         {
+            // Collect Artists
             List<ArtistDto> artists = DbContext.Artists
                 .Include(a => a.Image)
                 .Include(a => a.Content)
@@ -60,6 +61,7 @@ namespace AFisherWebApp.Controllers
                 .Select(a => new ArtistDto(a))
                 .ToList();
 
+            // Return to User
             return Json(artists, jsonSettings);
         }
 
@@ -67,6 +69,7 @@ namespace AFisherWebApp.Controllers
         [HttpGet("artist/{id}")]
         public IActionResult GetArtist(int id)
         {
+            // Select Artist with Id
             Artist artist = DbContext.Artists
                 .Include(a => a.Image)
                 .Include(a => a.Content)
@@ -74,8 +77,10 @@ namespace AFisherWebApp.Controllers
                 .Include(a => a.Link)
                 .FirstOrDefault(a => a.Id == id);
 
+            // Translate to Dto
             ArtistDto exportArtist = new ArtistDto(artist);
 
+            // Return to User
             return Json(exportArtist, jsonSettings);
         }
 
@@ -84,6 +89,7 @@ namespace AFisherWebApp.Controllers
         [HttpGet("album")]
         public IActionResult GetAlbums()
         {
+            // Collect Artists
             List<AlbumDto> albums = DbContext.Albums
                 .Include(a => a.Image)
                 .Include(a => a.Content)
@@ -92,6 +98,7 @@ namespace AFisherWebApp.Controllers
                 .Select(a => new AlbumDto(a))
                 .ToList();
 
+            // Return to User
             return Json(albums);
         }
 
