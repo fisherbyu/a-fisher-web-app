@@ -17,5 +17,11 @@ namespace AFisherWebApp.Models
         public int? AlbumId { get; set; }
         public Album Album { get; set; }
     }
+
+    public class LinkDto
+    {
+        public string AppleURI { get; set; }
+        public string SpotifyURI { get; set; }
+    }
 }
 

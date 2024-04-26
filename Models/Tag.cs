@@ -17,5 +17,11 @@ namespace AFisherWebApp.Models
         public int? AlbumId { get; set; }
         public Album Album { get; set; }
     }
+
+    public class TagDto
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
+    }
 }
 

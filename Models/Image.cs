@@ -17,5 +17,11 @@ namespace AFisherWebApp.Models
         public int? AlbumId { get; set; }
         public Album Album { get; set; }
     }
+
+    public class ImageDto
+    {
+        public string Src { get; set; }
+        public string Alt { get; set; }
+    }
 }
 

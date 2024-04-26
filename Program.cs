@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AFisherWebApp.Models;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
