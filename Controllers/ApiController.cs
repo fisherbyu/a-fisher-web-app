@@ -64,6 +64,21 @@ namespace AFisherWebApp.Controllers
         }
 
         // GET: api/artist/{id}
+        [HttpGet("artist/{id}")]
+        public IActionResult GetArtist(int id)
+        {
+            Artist artist = DbContext.Artists
+                .Include(a => a.Image)
+                .Include(a => a.Content)
+                .Include(a => a.Tags)
+                .Include(a => a.Link)
+                .FirstOrDefault(a => a.Id == id);
+
+            ArtistDto exportArtist = new ArtistDto(artist);
+
+            return Json(exportArtist, jsonSettings);
+        }
+
 
         // GET: api/album
         [HttpGet("album")]
