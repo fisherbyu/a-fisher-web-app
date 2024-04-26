@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AFisherWebApp.Migrations
 {
     [DbContext(typeof(AFisherDBContext))]
-    [Migration("20240426050732_UpdateRelationships")]
-    partial class UpdateRelationships
+    [Migration("20240426063937_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
