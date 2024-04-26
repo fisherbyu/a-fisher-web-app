@@ -26,50 +26,58 @@ namespace AFisherWebApp.Models
             modelBuilder.Entity<Artist>()
                 .HasMany(a => a.Content)
                 .WithOne(c => c.Artist)
-                .HasForeignKey(c => c.ArtistId);
+                .HasForeignKey(c => c.ArtistId)
+                .IsRequired(false);
 
             // Artist 0..1 ---- 1..* Tag
             modelBuilder.Entity<Artist>()
                 .HasMany(a => a.Tags)
                 .WithOne(t => t.Artist)
-                .HasForeignKey(t => t.ArtistId);
+                .HasForeignKey(t => t.ArtistId)
+                .IsRequired(false);
 
             // Artist 0..1 ---- 1..1 Link
             modelBuilder.Entity<Artist>()
                 .HasOne(a => a.Link)
                 .WithOne(l => l.Artist)
-                .HasForeignKey<Link>(l => l.ArtistId);
+                .HasForeignKey<Link>(l => l.ArtistId)
+                .IsRequired(false);
 
             // Artist 0..1 ---- 1..1 Image
             modelBuilder.Entity<Artist>()
                 .HasOne(a => a.Image)
                 .WithOne(i => i.Artist)
-                .HasForeignKey<Image>(i => i.ArtistId);
+                .HasForeignKey<Image>(i => i.ArtistId)
+                .IsRequired(false);
 
             // Configure Album Relationships
             // Album 0..1 ---- 1..* Content
             modelBuilder.Entity<Album>()
                 .HasMany(a => a.Content)
                 .WithOne(c => c.Album)
-                .HasForeignKey(c => c.AlbumId);
+                .HasForeignKey(c => c.AlbumId)
+                .IsRequired(false);
 
             // Album 0..1 ---- 1..* Tag
             modelBuilder.Entity<Album>()
                 .HasMany(a => a.Tags)
                 .WithOne(t => t.Album)
-                .HasForeignKey(t => t.AlbumId);
+                .HasForeignKey(t => t.AlbumId)
+                .IsRequired(false);
 
             // Album 0..1 ---- 1..1 Link
             modelBuilder.Entity<Album>()
                 .HasOne(a => a.Link)
                 .WithOne(l => l.Album)
-                .HasForeignKey<Link>(l => l.AlbumId);
+                .HasForeignKey<Link>(l => l.AlbumId)
+                .IsRequired(false);
 
             // Artist 0..1 ---- 1..1 Image
             modelBuilder.Entity<Album>()
                 .HasOne(a => a.Image)
                 .WithOne(i => i.Album)
-                .HasForeignKey<Image>(i => i.AlbumId);
+                .HasForeignKey<Image>(i => i.AlbumId)
+                .IsRequired(false);
         }
     }
 }
