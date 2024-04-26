@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AFisherWebApp.Controllers
@@ -101,6 +100,44 @@ namespace AFisherWebApp.Controllers
 
                 // Return a 500 Internal Server Error response
                 return StatusCode(500, $"An error occurred while creating the artist. {ex.InnerException}");
+            }
+        }
+
+        // POST: api/album
+        [HttpPost("album")]
+        public IActionResult CreateAlbum([FromBody] AlbumDto dto)
+        {
+            // Validate Input
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Add data to DB
+            try
+            {
+                // Convert Dto to Album
+                Album album = dto.ToAlbum();
+
+                // Add values to DB
+                DbContext.Add(album);
+                DbContext.AddRange(album.Content);
+                DbContext.AddRange(album.Tags);
+                DbContext.Add(album.Link);
+                DbContext.Add(album.Image);
+
+                //// Save changes to the database
+                DbContext.SaveChanges();
+
+                return Ok("Success!");
+            }
+            catch (Exception ex)
+            {
+                // Log Error
+                Console.Error.WriteLine($"Error creating album: {ex.InnerException}");
+
+                // Return a 500 Internal Server Error response
+                return StatusCode(500, $"An error occurred while creating the album. {ex.Message}");
             }
         }
     }
